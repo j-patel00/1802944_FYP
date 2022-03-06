@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- CSS -->
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  	<!-- jQuery library -->
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  	<!-- Popper JS -->
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  	<!-- JavaScript -->
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <title>Watchdog</title>
+   
+</head>
+<body>
+    <div class="jumbotron text-center">
+        <h1>Welcome to python watchdog for your file system</h1>
+        <p>Jinesh Patel 1802944</p>
+      </div>
+
+      <div class="container text-center">
+        <div class="sec_A">
+            
+            <div class="row">
+            <div class="col">
+                <h3>Actions</h3>
+                
+                <!-- jinja statement to allow buttons to show depending on state -->
+                {% if running %}
+                    <form action="/stop" method="post">
+                        <button type="submit" class="btn btn-danger">Stop</button>
+                    </form>
+                {% else %}
+                    <form action="/start" method="post">
+                        <button type="submit" class="btn btn-success">Start</button>
+                    </form>
+                {% endif %}
+               
+                
+                
+            </div>
+
+            <div class="col">
+                <h3>Current Log</h3>
+                <p>Below is a log file for the system being monitored
+                    The data is organised into the following CSV format
+                    
+                    'Date','Time','Event','Location','Username'
+                    
+                    The even types are as follows:                    
+                    'created', 'deleted', 'modified', 'moved', 'closed'<br />
+                <!-- <object data="/log.txt" type="text/plain" width="1000" style="height: 300px"> -->
+                <a href="/static/log.txt">Log File</a>
+                <p><iframe src="/static/log.txt" frameborder="0" height="400"
+                    width="100%"></iframe></p>
+</object>
+            </div>
+            <div class="col">
+                <h3>Analytics</h3>
+                <!-- <p><br />Lorem ipsum dolor sit amet</p> -->
+                <img src="/static/event_frequency.png" alt="event frequency" style="height: 300px">
+                <img src="/static/event_pie.png" alt="event pie chart" style="height: 300px">
+                <img src="/static/user_active.png" alt="active users" style="height: 300px">
+                
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>>
+</body>
+</html>

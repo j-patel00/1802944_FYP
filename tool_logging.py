@@ -17,11 +17,11 @@ import getpass
 
 #######################################################################
 #Below you can change directory to store log file, and the files name
-completeName = (os.path.join("/var/www/html", "log.txt"))#Sets directory to path, file called log.txt
+completeName = (os.path.join("/var/www/html/static", "log.txt"))#Sets directory to path, file called log.txt
 #######################################################################
 
 file = open(completeName, "a")#Opens filename in set directory, appends to file named
-df = pd.read_csv ('log.txt',  header=None, names=['Date','Time','Event','Location','Username'])#creates datafram with each column having the following names
+df = pd.read_csv ('./static/log.txt',  header=None, names=['Date','Time','Event','Location','Username'])#creates datafram with each column having the following names
 
 print (df)#shows initial data structure before launch of live monitoring
 ####################################################################################
@@ -30,27 +30,27 @@ event_freq = df['Event'].value_counts().plot(kind='bar', title='Most common even
 event_freq.set_xlabel("Event Type")
 plt.xticks(rotation=30)
 fig = event_freq.get_figure()
-fig.savefig("event_frequency.png", pad_inches=0.3, dpi=300, bbox_inches='tight')
+fig.savefig("./static/event_frequency.png", pad_inches=0.3, dpi=300, bbox_inches='tight')
 plt.close()
 
 #event pie chart
 event_pie = df['Event'].value_counts().plot(kind='pie')
 fig2 = event_pie.get_figure()
-fig2.savefig("event_pie.png", pad_inches=0.3)
+fig2.savefig("./static/event_pie.png", pad_inches=0.3)
 plt.close()
 
 #most active users
 user_act = df['Username'].value_counts().plot(kind='bar', title='Active Users', xlabel='Users', fontsize=18)
 plt.xticks(rotation=30)
 fig3 = user_act.get_figure()
-fig3.savefig("user_active.png", pad_inches=0.3, dpi=300, bbox_inches='tight')
+fig3.savefig("./static/user_active.png", pad_inches=0.3, dpi=300, bbox_inches='tight')
 plt.close()
 ####################################################################################
 
 class Watcher:#Monitor for events
 
     def __init__(self, directory, handler=FileSystemEventHandler()):
-             
+        self.running = False #script is not running     
         self.observer = Observer()
         self.handler = handler
         ######################################################################
@@ -63,16 +63,14 @@ class Watcher:#Monitor for events
         self.observer.schedule(
             self.handler, self.directory, recursive=True)#Recursive=True includes all subfolders, False will ignore subfolers
         self.observer.start()
-        
+        self.running = True 
         print("\nWatcher Running in {}\n".format(self.directory))#Shell outputs script is running and monitoring location
         
-        try:
-            while True:
-                time.sleep(1)
-        except:
-            self.observer.stop()
-        self.observer.join()
-        print("\nWatcher Terminated\n")
+    
+    def stop(self):
+        self.observer.stop()#Stop watchdog script
+        self.running = False 
+        print("\nWatcher Terminated in {}\n".format(self.directory))
 
 
 class MyHandler(FileSystemEventHandler):#What to do in response to event
